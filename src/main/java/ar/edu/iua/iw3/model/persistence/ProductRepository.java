@@ -12,3 +12,4 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 
 	Optional<Product> findByProduct(String product);
 }
+// SELECT * FROM products WHERE  product=? OR price=? ORDER BY price
