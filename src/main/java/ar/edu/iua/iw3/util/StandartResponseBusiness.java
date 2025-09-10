@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 public class StandartResponseBusiness implements IStandartResponseBusiness {
 
 	@Value("${dev.info.enabled:false}")
-	private boolean devInfoEnabled; 
-	
+	private boolean devInfoEnabled;
+
 	@Override
 	public StandartResponse build(HttpStatus httpStatus, Throwable ex, String message) {
 		StandartResponse sr=new StandartResponse();

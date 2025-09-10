@@ -23,13 +23,13 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
+
 	@Column(length = 100, unique=true)
 	private String product;
-	
+
 	@Column(columnDefinition = "tinyint default 0")
 	private boolean stock = false;
-	
+
 	private double precio;
-	
+
 }

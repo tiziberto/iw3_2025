@@ -25,12 +25,12 @@ public class StandartResponse {
 	private HttpStatus httpStatus;
 
 	public int getCode() {
-		return httpStatus.value(); 
+		return httpStatus.value();
 	}
-	
+
 	@JsonIgnore
-	private boolean devInfoEnabled; 
-	
+	private boolean devInfoEnabled;
+
 	public String getDevInfo() {
 		if(devInfoEnabled) {
 			if(ex!=null) {
@@ -42,12 +42,14 @@ public class StandartResponse {
 			return null;
 		}
 	}
-	
+
 	public String getMessage() {
-		if(message!=null)
+		if(message!=null) {
 			return message;
-		if (ex!=null)
+		}
+		if (ex!=null) {
 			return ex.getMessage();
+		}
 		return null;
 	}
 }

@@ -10,7 +10,7 @@ public class BusinessException extends Exception{
 	public BusinessException(String message, Throwable ex) {
 		super(message, ex);
 	}
-	
+
 	@Builder
 	public BusinessException(String message) {
 		super(message);

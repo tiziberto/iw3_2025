@@ -31,6 +31,6 @@ public class SecurityConfiguration {
  function sumauno(a) {
  	return a+1;
  }
- 
- sumauno= a-> { return a+1; } 
+
+ sumauno= a-> { return a+1; }
  */
