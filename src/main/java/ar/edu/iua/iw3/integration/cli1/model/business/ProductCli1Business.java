@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ProductCli1Business implements IProductCli1Business {
 
-	@Autowired
+	@Autowired(required = false)
 	private ProductCli1Repository productDAO;
 
 	@Override
