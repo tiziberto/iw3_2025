@@ -1,6 +1,8 @@
 package ar.edu.iua.iw3.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -96,5 +98,46 @@ public final class JsonUtiles {
 			r = defaultValue;
 		return r;
 	}
+
+		public static Date getDate(JsonNode node, String[] attrs, Date defaultValue) throws ParseException {
+		Date r = null;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+
+
+		for (String attr : attrs) {
+			if (node.has(attr) && node.get(attr).isTextual()) {
+				r = sdf.parse(node.get(attr).asText());
+
+				break;
+			}
+		}
+
+		if (r == null)
+			r = defaultValue;
+
+		return r;
+	}
+	public static String[] getArrayComponent(JsonNode node, String[] attrs, String[] defaultValue) {
+    String[] r = null;
+    for (String attr : attrs) {
+        if (node.get(attr) != null && node.get(attr).isArray()) {
+            JsonNode arrayNode = node.get(attr);
+            r = new String[arrayNode.size()];
+            for (int i = 0; i < arrayNode.size(); i++) {
+                JsonNode compNode = arrayNode.get(i);
+                if (compNode.has("component")) {
+                    r[i] = compNode.get("component").asText();
+                } else {
+                    r[i] = ""; // o null, según cómo quieras manejarlo
+                }
+            }
+            break;
+        }
+    }
+    if (r == null) r = defaultValue;
+    return r;
+}
+
+
 
 }

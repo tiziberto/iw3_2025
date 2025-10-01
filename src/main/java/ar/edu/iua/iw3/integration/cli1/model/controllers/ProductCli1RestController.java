@@ -25,7 +25,8 @@ import ar.edu.iua.iw3.util.IStandartResponseBusiness;
 
 @RestController
 @RequestMapping(Constants.URL_INTEGRATION_CLI1 + "/products")
-@Profile("cli1")
+//@Profile("cli1")
+@Profile("mysqlprod")
 public class ProductCli1RestController extends BaseRestController {
 
 	@Autowired
@@ -83,6 +84,9 @@ public class ProductCli1RestController extends BaseRestController {
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		} catch (FoundException e) {
 			return new ResponseEntity<>(response.build(HttpStatus.FOUND, e, e.getMessage()), HttpStatus.FOUND);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+
 		}
 	}
 
