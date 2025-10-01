@@ -1,6 +1,5 @@
 package ar.edu.iua.iw3.integration.cli2.model.business;
 
-
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +48,8 @@ public class ProductCli2Business implements IProductCli2Business {
 			throw BusinessException.builder().ex(e).build();
 		}
 	}
+
+}
 
 	@Autowired
 	private IProductBusiness productBaseBusiness;
