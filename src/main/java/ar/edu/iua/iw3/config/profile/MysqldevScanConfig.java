@@ -15,8 +15,8 @@ excludeFilters = {
 @EntityScan(basePackages = { 
 		"ar.edu.iua.iw3.model", 
 		"ar.edu.iua.iw3.auth", 
-		"ar.edu.iua.iw3.integration.cli1.model", 
-		"ar.edu.iua.iw3.integration.cli2.model" 
+		//"ar.edu.iua.iw3.integration.cli1.model", 
+		//"ar.edu.iua.iw3.integration.cli2.model" 
 })
 
 @Profile("mysqldev")

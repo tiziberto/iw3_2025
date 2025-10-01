@@ -82,18 +82,22 @@ public class ProductCli1Business implements IProductCli1Business {
 
 	@Override
 	public ProductCli1 addExternal(String json) throws FoundException, BusinessException {
-		ObjectMapper mapper = JsonUtiles.getObjectMapper(ProductCli1.class,
-				new ProductCli1JsonDeserializer(ProductCli1.class, categoryBusiness),null);
-		ProductCli1 product = null;
 		try {
-			product = mapper.readValue(json, ProductCli1.class);
-		} catch (JsonProcessingException e) {
-			log.error(e.getMessage(), e);
+			ObjectMapper mapper = JsonUtiles.getObjectMapper(ProductCli1.class,
+					new ProductCli1JsonDeserializer(ProductCli1.class, categoryBusiness),null);
+			ProductCli1 product = mapper.readValue(json, ProductCli1.class);
+			
+			return add(product);
+			
+		} catch (BusinessException | FoundException e) {
+			throw e;
+		} catch (com.fasterxml.jackson.core.JsonProcessingException e) {
+			log.error("Error de formato JSON en addExternal cli1", e);
+			throw new BusinessException("Formato JSON inválido: " + e.getMessage());
+		} catch (Exception e) {
+			log.error("Error general en addExternal cli1", e);
 			throw BusinessException.builder().ex(e).build();
 		}
-
-		return add(product);
-
 	}
 
 

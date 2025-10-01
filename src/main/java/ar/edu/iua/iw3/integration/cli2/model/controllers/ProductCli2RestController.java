@@ -1,8 +1,10 @@
 package ar.edu.iua.iw3.integration.cli2.model.controllers;
 
 
+import java.net.http.HttpHeaders;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -24,6 +26,7 @@ import ar.edu.iua.iw3.integration.cli2.model.ProductCli2;
 import ar.edu.iua.iw3.integration.cli2.model.ProductCli2SlimV1JsonSerializer;
 import ar.edu.iua.iw3.integration.cli2.model.business.IProductCli2Business;
 import ar.edu.iua.iw3.model.business.BusinessException;
+import ar.edu.iua.iw3.model.business.FoundException;
 import ar.edu.iua.iw3.util.IStandartResponseBusiness;
 import ar.edu.iua.iw3.util.JsonUtiles;
 import lombok.extern.slf4j.Slf4j;
@@ -69,5 +72,44 @@ public class ProductCli2RestController extends BaseRestController {
 		}
 	}
 
+	@PostMapping(value = "/b2b")
+	public ResponseEntity<?> addExternal(HttpEntity<String> httpEntity) {
+		try {
+			ProductCli2 saved = productBusiness.addExternal(httpEntity.getBody());
+
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.set("location", Constants.URL_INTEGRATION_CLI2 + "/products/" + saved.getId());
+
+			return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
+
+		} catch (BusinessException e) {
+			// Error de validación → 400 Bad Request
+			return ResponseEntity
+					.status(HttpStatus.BAD_REQUEST)
+					.body("Error de validación: " + e.getMessage());
+
+		} catch (FoundException e) {
+			return new ResponseEntity<>(response.build(HttpStatus.FOUND, e, e.getMessage()), HttpStatus.FOUND);
+		} catch (Exception e) {
+			// Error de formato JSON u otros errores no controlados
+			return ResponseEntity
+					.status(HttpStatus.BAD_REQUEST)
+					.body("Error de formato JSON: " + e.getMessage());
+		}
+	}
+
+	// http://localhost:8080/api/v1/integration/cli2/products/list-by-price?start-price=10&end-price=20
+	@GetMapping(value = "/list-by-price", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> listByPrice(
+			@RequestParam(name = "start-price", required = false) Double min,
+			@RequestParam(name = "end-price", required = false) Double max) {
+		try {
+			List<ProductCli2> products = productBusiness.listByPriceRange(min, max);
+			return new ResponseEntity<>(products, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<>(response.build(HttpStatus.INTERNAL_SERVER_ERROR, e, e.getMessage()),
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }
 

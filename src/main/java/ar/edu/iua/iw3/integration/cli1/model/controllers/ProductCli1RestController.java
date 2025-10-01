@@ -79,10 +79,17 @@ public class ProductCli1RestController extends BaseRestController {
 			responseHeaders.set("location", Constants.URL_INTEGRATION_CLI1 + "/products/" + response.getCodCli1());
 			return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
 		} catch (BusinessException e) {
-			return new ResponseEntity<>(response.build(HttpStatus.INTERNAL_SERVER_ERROR, e, e.getMessage()),
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			//Mandamos un bad request para saber q se mando mal el json
+			return ResponseEntity
+	                .status(HttpStatus.BAD_REQUEST)
+	                .body("Error de validación: " + e.getMessage());
 		} catch (FoundException e) {
 			return new ResponseEntity<>(response.build(HttpStatus.FOUND, e, e.getMessage()), HttpStatus.FOUND);
+		} catch (Exception e) {
+			// Error de formato JSON u otros errores no controlados
+			return ResponseEntity
+					.status(HttpStatus.BAD_REQUEST)
+					.body("Error de formato JSON: " + e.getMessage());
 		}
 	}
 
