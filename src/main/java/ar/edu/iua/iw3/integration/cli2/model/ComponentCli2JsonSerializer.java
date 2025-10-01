@@ -1,52 +1,32 @@
 package ar.edu.iua.iw3.integration.cli2.model;
 
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
-import java.util.Date;
-import java.util.HashSet;
+import java.io.IOException;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
-// ...existing code...
-        }
-        Date expirationDate;
-        try {
-            expirationDate = JsonUtiles.getDate(node, "expirationDate,expiration_date".split(","), null);
-            if (expirationDate == null) {
-                throw new IllegalArgumentException("El campo 'expirationDate' es obligatorio y no puede estar vacío.");
-            }
+public class ComponentCli2JsonSerializer   extends StdSerializer<ComponentCli2>{
 
-            r.setExpirationDate(expirationDate);
-        } catch (ParseException e) {
-            throw new IllegalArgumentException(
-                    "El campo 'expirationDate' tiene un formato inválido. Se esperaba ISO-8601.");
-        }
+	protected ComponentCli2JsonSerializer(Class<ComponentCli2> t) {
+		super(t);
+	}
 
-        String[] componentsStr = JsonUtiles.getArrayComponent(node,
-                "components,parts".split(","), null);
+	@Override
+	public void serialize(ComponentCli2 value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+		/*
+		 * {
+		 * "id": 123,
+		 * "component": "Harina"
+		 * }
+		 */
+		gen.writeStartObject(); // {
+		gen.writeNumberField("id",value.getId()); // "id": 123,
+		gen.writeStringField("component", value.getComponent()); //"component": "Harina"
+		gen.writeEndObject(); // }
+		
+	}
 
-        if (componentsStr != null && componentsStr.length > 0) {
-            if (r.getComponents() == null) {
-                r.setComponents(new HashSet<>());
-            }
 
-            for (String comp : componentsStr) {
-                comp = comp.trim();
-                try {
-                    r.getComponents().add(componentBusiness.load(comp));
-                } catch (NotFoundException e) {
-                    throw new IllegalArgumentException(
-                            "El componente '" + comp + "' no existe. Solo se pueden asociar componentes existentes.");
-                } catch (BusinessException e) {
-                    throw new IllegalArgumentException(
-                            "Error al cargar el componente '" + comp + "'.", e);
-                }
-            }
-        }
-
-        return r;
-    }
 
 }
