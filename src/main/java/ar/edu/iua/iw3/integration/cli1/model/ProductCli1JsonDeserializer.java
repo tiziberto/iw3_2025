@@ -36,9 +36,11 @@ public class ProductCli1JsonDeserializer extends StdDeserializer<ProductCli1> {
 				System.currentTimeMillis() + "");
 		String productDesc = JsonUtiles.getString(node,
 				"product,description,product_description,product_name".split(","), null);
-		if (productDesc == null || productDesc.trim().isEmpty()) { // Controlar el nombre del producto, que exsita y no este vacio
+		
+		if (productDesc == null || productDesc.trim().isEmpty()) {
 		    throw new IOException("El nombre del producto es obligatorio");
 		}
+
 		double price = JsonUtiles.getDouble(node, "product_price,price_product,price".split(","), 0);
 		boolean stock = JsonUtiles.getBoolean(node, "stock,in_stock".split(","), false);
 		r.setCodCli1(code);

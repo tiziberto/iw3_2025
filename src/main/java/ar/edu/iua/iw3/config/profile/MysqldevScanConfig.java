@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 excludeFilters = {
 })
 
-
 //Entidades
 @EntityScan(basePackages = { 
 		"ar.edu.iua.iw3.model", 
@@ -23,4 +22,3 @@ excludeFilters = {
 public class MysqldevScanConfig {
 
 }
-
